@@ -13,7 +13,7 @@ contract JoKenPo {
     Options private choice1 = Options.NONE;
     address private player1;
     string public result = "";
-    address payable private immutable owner; 
+    address payable private immutable owner;
 
     constructor() {
         owner = payable(msg.sender);

@@ -1,0 +1,19 @@
+{
+  "name": "jokenpo",
+  "description": "This Solidity smart contract implements a game of Rock, Paper, Scissors (JoKenPo) with the ability to play against another player and determine the winner based on the traditional rules of the game.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx hardhat node",
+    "test": "npx hardhat test"
+  },
+  "author": "Eduardo Silva Feitosa",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.6"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
