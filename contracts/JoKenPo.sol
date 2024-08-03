@@ -3,20 +3,21 @@
 pragma solidity ^0.8.17;
 
 import "./IJoKenPo.sol";
+import "./JKPLibrary.sol";
 
 /**
  * @title JoKenPo
  * @dev A smart contract for a Rock-Paper-Scissors game with betting and leaderboard functionality.
  */
 contract JoKenPo is IJoKenPo {
-    Options private choice1 = Options.NONE;
+    JKPLibrary.Options private choice1 = JKPLibrary.Options.NONE;
     address private player1;
     string private result = "";
     address payable private immutable owner;
     uint256 private bid = 0.01 ether;
     uint8 private comission = 10;
 
-    Player[] public players;
+    JKPLibrary.Player[] public players;
 
     /**
      * @dev Constructor that sets the contract owner.
@@ -41,7 +42,7 @@ contract JoKenPo is IJoKenPo {
 
         result = newResult;
         player1 = address(0);
-        choice1 = Options.NONE;
+        choice1 = JKPLibrary.Options.NONE;
     }
 
     /**
@@ -56,7 +57,7 @@ contract JoKenPo is IJoKenPo {
             }
         }
 
-        players.push(Player(winner, 1));
+        players.push(JKPLibrary.Player(winner, 1));
     }
 
     /**
@@ -119,32 +120,50 @@ contract JoKenPo is IJoKenPo {
      * @dev External function for a player to play the game.
      * @param newChoice The choice (Rock, Paper, Scissors) made by the player.
      */
-    function play(Options newChoice) external payable {
+    function play(JKPLibrary.Options newChoice) external payable {
         require(msg.sender != owner, "The owner cannot play");
-        require(newChoice != Options.NONE, "Invalid choice");
+        require(newChoice != JKPLibrary.Options.NONE, "Invalid choice");
         require(player1 != msg.sender, "Wait for the other player");
         require(msg.value >= bid, "Invalid bid");
 
-        if (choice1 == Options.NONE) {
+        if (choice1 == JKPLibrary.Options.NONE) {
             player1 = msg.sender;
             choice1 = newChoice;
             result = "Player 1 chose their option. Waiting for player 2.";
-        } else if (choice1 == Options.ROCK && newChoice == Options.SCISSORS) {
+        } else if (
+            choice1 == JKPLibrary.Options.ROCK &&
+            newChoice == JKPLibrary.Options.SCISSORS
+        ) {
             finishGame("Rock breaks scissors. Player 1 won.", player1);
-        } else if (choice1 == Options.PAPER && newChoice == Options.ROCK) {
+        } else if (
+            choice1 == JKPLibrary.Options.PAPER &&
+            newChoice == JKPLibrary.Options.ROCK
+        ) {
             finishGame("Paper wraps rock. Player 1 won.", player1);
-        } else if (choice1 == Options.SCISSORS && newChoice == Options.PAPER) {
+        } else if (
+            choice1 == JKPLibrary.Options.SCISSORS &&
+            newChoice == JKPLibrary.Options.PAPER
+        ) {
             finishGame("Scissors cuts paper. Player 1 won.", player1);
-        } else if (newChoice == Options.ROCK && choice1 == Options.SCISSORS) {
+        } else if (
+            newChoice == JKPLibrary.Options.ROCK &&
+            choice1 == JKPLibrary.Options.SCISSORS
+        ) {
             finishGame("Rock breaks scissors. Player 2 won.", msg.sender);
-        } else if (newChoice == Options.PAPER && choice1 == Options.ROCK) {
+        } else if (
+            newChoice == JKPLibrary.Options.PAPER &&
+            choice1 == JKPLibrary.Options.ROCK
+        ) {
             finishGame("Paper wraps rock. Player 2 won.", msg.sender);
-        } else if (newChoice == Options.SCISSORS && choice1 == Options.PAPER) {
+        } else if (
+            newChoice == JKPLibrary.Options.SCISSORS &&
+            choice1 == JKPLibrary.Options.PAPER
+        ) {
             finishGame("Scissors cuts paper. Player 2 won.", msg.sender);
         } else {
             result = "Draw game. The prize was doubled.";
             player1 = address(0);
-            choice1 = Options.NONE;
+            choice1 = JKPLibrary.Options.NONE;
         }
     }
 
@@ -160,16 +179,22 @@ contract JoKenPo is IJoKenPo {
      * @dev External function to get the leaderboard of players based on their wins.
      * @return An array of Player structs sorted in descending order of wins.
      */
-    function getLeaderboard() external view returns (Player[] memory) {
+    function getLeaderboard()
+        external
+        view
+        returns (JKPLibrary.Player[] memory)
+    {
         if (players.length < 2) return players;
 
-        Player[] memory arr = new Player[](players.length);
+        JKPLibrary.Player[] memory arr = new JKPLibrary.Player[](
+            players.length
+        );
         for (uint256 i = 0; i < players.length; i++) arr[i] = players[i];
 
         for (uint256 i = 0; i < arr.length - 1; i++) {
             for (uint256 j = i + 1; j < arr.length; j++) {
                 if (arr[i].wins < arr[j].wins) {
-                    Player memory temp = arr[i];
+                    JKPLibrary.Player memory temp = arr[i];
                     arr[i] = arr[j];
                     arr[j] = temp;
                 }

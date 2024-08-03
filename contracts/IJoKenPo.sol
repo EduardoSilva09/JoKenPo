@@ -2,24 +2,14 @@
 
 pragma solidity ^0.8.17;
 
+import "./JKPLibrary.sol";
+
 /**
  * @title IJoKenPo
  * @dev Interface for a JoKenPo (Rock-Paper-Scissors) game contract.
  * Defines the structure and functions needed for the game.
  */
 interface IJoKenPo {
-    enum Options {
-        NONE,
-        ROCK,
-        PAPER,
-        SCISSORS
-    }
-
-    struct Player {
-        address wallet;
-        uint32 wins;
-    }
-
     /**
      * @dev Retrieves the current bid amount for the game.
      * @return The current bid amount as a uint256 value.
@@ -60,11 +50,14 @@ interface IJoKenPo {
      * @dev Allows a player to make a choice and participate in the game.
      * @param newChoice The choice made by the player, represented as an Options enum value.
      */
-    function play(Options newChoice) external payable;
+    function play(JKPLibrary.Options newChoice) external payable;
 
     /**
      * @dev Retrieves the leaderboard, which lists players and their wins.
      * @return An array of Player structs representing the current leaderboard.
      */
-    function getLeaderboard() external view returns (Player[] memory);
+    function getLeaderboard()
+        external
+        view
+        returns (JKPLibrary.Player[] memory);
 }
