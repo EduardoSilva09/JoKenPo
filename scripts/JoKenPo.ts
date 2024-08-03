@@ -1,10 +1,18 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  const joKenPo = await ethers.deployContract("JoKenPo");
-  await joKenPo.waitForDeployment();
-  const address = joKenPo.getAddress();
-  console.log(`Contract deployed at ${address}`);
+  const implementation = await ethers.deployContract("JoKenPo");
+  await implementation.waitForDeployment();
+  const implementationAddress = await implementation.getAddress();
+  console.log(`Implementation deployed at ${implementationAddress}`);
+
+  const adapter = await ethers.deployContract("JKPAdapter");
+  await adapter.waitForDeployment();
+  const adapterAddress = await adapter.getAddress();
+  console.log(`Adapter deployed at ${adapterAddress}`);
+
+  await adapter.upgrade(implementationAddress);
+  console.log('Adapter was upgraded.');
 }
 
 main()
