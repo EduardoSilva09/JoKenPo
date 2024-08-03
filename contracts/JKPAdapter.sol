@@ -26,7 +26,7 @@ contract JKPAdapter {
      * @dev Retrieves the current address of the JoKenPo implementation contract.
      * @return The address of the current JoKenPo implementation contract.
      */
-    function getAddress() external view returns (address) {
+    function getImplementationAddress() external view returns (address) {
         return address(joKenPo);
     }
 
@@ -43,7 +43,7 @@ contract JKPAdapter {
      * @dev Retrieves the current bid amount from the JoKenPo implementation.
      * @return The current bid amount as a uint256 value.
      */
-    function getBid() external view returns (uint256) {
+    function getBid() external view upgraded returns (uint256) {
         return joKenPo.getBid();
     }
 
@@ -51,7 +51,7 @@ contract JKPAdapter {
      * @dev Retrieves the current commission percentage for the game.
      * @return The commission percentage as a uint8 value.
      */
-    function getCommission() external view returns (uint8) {
+    function getCommission() external view upgraded returns (uint8) {
         return joKenPo.getCommission();
     }
 
@@ -60,7 +60,7 @@ contract JKPAdapter {
      * This function is restricted to only the owner.
      * @return The current balance as a uint256 value.
      */
-    function getBalance() external view restricted returns (uint256) {
+    function getBalance() external view upgraded restricted returns (uint256) {
         return joKenPo.getBalance();
     }
 
@@ -69,7 +69,7 @@ contract JKPAdapter {
      * This function is restricted to only the owner.
      * @param newBid The new bid amount to be set, as a uint256 value.
      */
-    function setBid(uint256 newBid) external restricted {
+    function setBid(uint256 newBid) external upgraded restricted {
         return joKenPo.setBid(newBid);
     }
 
@@ -78,7 +78,7 @@ contract JKPAdapter {
      * This function is restricted to only the owner.
      * @param newCommission The new commission percentage to be set, as a uint8 value.
      */
-    function setCommission(uint8 newCommission) external restricted {
+    function setCommission(uint8 newCommission) external upgraded restricted {
         return joKenPo.setCommission(newCommission);
     }
     /**
@@ -98,6 +98,7 @@ contract JKPAdapter {
     function getLeaderboard()
         external
         view
+        upgraded
         returns (JKPLibrary.Player[] memory)
     {
         return joKenPo.getLeaderboard();
