@@ -1,30 +1,20 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.12;
+pragma solidity ^0.8.17;
+
+import "./IJoKenPo.sol";
 
 /**
  * @title JoKenPo
  * @dev A smart contract for a Rock-Paper-Scissors game with betting and leaderboard functionality.
  */
-contract JoKenPo {
-    enum Options {
-        NONE,
-        ROCK,
-        PAPER,
-        SCISSORS
-    }
-
+contract JoKenPo is IJoKenPo {
     Options private choice1 = Options.NONE;
     address private player1;
     string private result = "";
     address payable private immutable owner;
     uint256 private bid = 0.01 ether;
     uint8 private comission = 10;
-
-    struct Player {
-        address wallet;
-        uint32 wins;
-    }
 
     Player[] public players;
 
@@ -91,6 +81,14 @@ contract JoKenPo {
      */
     function getResult() external view returns (string memory) {
         return result;
+    }
+
+    /**
+     * @dev External function to get the current balance of the game contract.
+     * @return The current balance of the contract as a uint256 value.
+     */
+    function getBalance() external view restricted returns (uint256) {
+        return address(this).balance;
     }
 
     /**
