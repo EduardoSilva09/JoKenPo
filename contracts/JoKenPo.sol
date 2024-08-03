@@ -121,13 +121,13 @@ contract JoKenPo is IJoKenPo {
      * @param newChoice The choice (Rock, Paper, Scissors) made by the player.
      */
     function play(JKPLibrary.Options newChoice) external payable {
-        require(msg.sender != owner, "The owner cannot play");
+        require(tx.origin != owner, "The owner cannot play");
         require(newChoice != JKPLibrary.Options.NONE, "Invalid choice");
-        require(player1 != msg.sender, "Wait for the other player");
+        require(player1 != tx.origin, "Wait for the other player");
         require(msg.value >= bid, "Invalid bid");
 
         if (choice1 == JKPLibrary.Options.NONE) {
-            player1 = msg.sender;
+            player1 = tx.origin;
             choice1 = newChoice;
             result = "Player 1 chose their option. Waiting for player 2.";
         } else if (
@@ -149,17 +149,17 @@ contract JoKenPo is IJoKenPo {
             newChoice == JKPLibrary.Options.ROCK &&
             choice1 == JKPLibrary.Options.SCISSORS
         ) {
-            finishGame("Rock breaks scissors. Player 2 won.", msg.sender);
+            finishGame("Rock breaks scissors. Player 2 won.", tx.origin);
         } else if (
             newChoice == JKPLibrary.Options.PAPER &&
             choice1 == JKPLibrary.Options.ROCK
         ) {
-            finishGame("Paper wraps rock. Player 2 won.", msg.sender);
+            finishGame("Paper wraps rock. Player 2 won.", tx.origin);
         } else if (
             newChoice == JKPLibrary.Options.SCISSORS &&
             choice1 == JKPLibrary.Options.PAPER
         ) {
-            finishGame("Scissors cuts paper. Player 2 won.", msg.sender);
+            finishGame("Scissors cuts paper. Player 2 won.", tx.origin);
         } else {
             result = "Draw game. The prize was doubled.";
             player1 = address(0);
@@ -171,7 +171,7 @@ contract JoKenPo is IJoKenPo {
      * @dev Modifier that allows only the contract owner to execute the function.
      */
     modifier restricted() {
-        require(owner == msg.sender, "You do not have permission");
+        require(owner == tx.origin, "You do not have permission");
         _;
     }
 
