@@ -154,7 +154,7 @@ contract JoKenPo {
      * @dev Modifier that allows only the contract owner to execute the function.
      */
     modifier restricted() {
-        require(owner == msg.sender, "You do not have permission.");
+        require(owner == msg.sender, "You do not have permission");
         _;
     }
 
