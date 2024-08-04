@@ -50,7 +50,9 @@ interface IJoKenPo {
      * @dev Allows a player to make a choice and participate in the game.
      * @param newChoice The choice made by the player, represented as an Options enum value.
      */
-    function play(JKPLibrary.Options newChoice) external payable;
+    function play(
+        JKPLibrary.Options newChoice
+    ) external payable returns (string memory);
 
     /**
      * @dev Retrieves the leaderboard, which lists players and their wins.

@@ -6,7 +6,8 @@
   "scripts": {
     "start": "npx hardhat node",
     "test": "npx hardhat test",
-    "deploy:local": "npx hardhat run scripts/JoKenPo.ts --network local"
+    "deploy:local": "npx hardhat run scripts/JoKenPo.ts --network local",
+    "deploy:bsctest": "npx hardhat run scripts/JoKenPo.ts --network bsctest"
   },
   "author": "Eduardo Silva Feitosa",
   "license": "MIT",

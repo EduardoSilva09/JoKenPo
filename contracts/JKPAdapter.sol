@@ -13,7 +13,7 @@ import "./JKPLibrary.sol";
 contract JKPAdapter {
     IJoKenPo private joKenPo;
     address public immutable owner;
-
+    event Played(address indexed player, string result);
     /**
      * @dev Sets the contract deployer as the owner of the contract.
      * The constructor is called only once when the contract is deployed.
@@ -88,7 +88,8 @@ contract JKPAdapter {
      * @notice This function accepts Ether, which will be forwarded to the JoKenPo implementation.
      */
     function play(JKPLibrary.Options newChoice) external payable upgraded {
-        return joKenPo.play{value: msg.value}(newChoice);
+        string memory result = joKenPo.play{value: msg.value}(newChoice);
+        emit Played(msg.sender, result);
     }
 
     /**

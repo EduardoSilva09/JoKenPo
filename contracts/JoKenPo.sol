@@ -120,7 +120,9 @@ contract JoKenPo is IJoKenPo {
      * @dev External function for a player to play the game.
      * @param newChoice The choice (Rock, Paper, Scissors) made by the player.
      */
-    function play(JKPLibrary.Options newChoice) external payable {
+    function play(
+        JKPLibrary.Options newChoice
+    ) external payable returns (string memory) {
         require(tx.origin != owner, "The owner cannot play");
         require(newChoice != JKPLibrary.Options.NONE, "Invalid choice");
         require(player1 != tx.origin, "Wait for the other player");
@@ -165,6 +167,7 @@ contract JoKenPo is IJoKenPo {
             player1 = address(0);
             choice1 = JKPLibrary.Options.NONE;
         }
+        return result;
     }
 
     /**
